@@ -157,7 +157,7 @@ def analyze_diff(rel_id: int, changes: List[Diff]) -> str:
                     additional = f"'s {what}"
                 else:
                     additional = ""
-                print(f"member #{member_pos}{additional} changed: {change.old_str} -> {change.new_str}")
+                print(f"member #{member_pos}{additional} changed: {change.old_str} -> {change.new_str}", file=diff)
 
         elif path.startswith("tag."):
             if change.new is None:
@@ -176,6 +176,6 @@ def analyze_diff(rel_id: int, changes: List[Diff]) -> str:
 
 
     #log.info(diff.getvalue())
+    res = diff.getvalue()
     diff.close()
-
-    return diff
+    return res

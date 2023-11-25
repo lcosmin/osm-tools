@@ -80,5 +80,5 @@ def main():
             if changes:
 
                 diff = analyze_diff(new.id, changes)
-
-                break
+                log.info(diff)
+               
