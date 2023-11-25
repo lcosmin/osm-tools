@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "osmtools"
+version = "0.1.0"
+description = "A set of OpenStreetMap helper tools"
+authors = ["Cosmin Luță <q4break@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.13"
+osmapi = "^4.0.0"
+numpy = "^1.26.1"
+pandas = "^2.1.1"
+pydantic = "^2.4.2"
+pyyaml = "^6.0.1"
+
+
+[tool.poetry.group.dev.dependencies]
+ipython = "^8.16.0"
+black = "^23.11.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
