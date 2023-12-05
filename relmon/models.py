@@ -140,7 +140,7 @@ def diff_relation(new: Relation, old: Relation) -> List[Diff]:
                 )
 
     if members:
-        pos = 0
+        pos = -1
         for n, o in zip_longest(new.members, old.members, fillvalue=None):
             pos += 1
             if n is None:

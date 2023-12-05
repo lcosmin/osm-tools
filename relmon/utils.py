@@ -122,7 +122,7 @@ def get_relation_dict(api: "osmapi.OsmApi", rel_id: str) -> dict:
     return expanded
 
 
-def analyze_diff(rel_id: int, changes: List[Diff]) -> str:
+def generate_report(rel_id: int, new: Relation, old: Relation, changes: List[Diff]) -> str:
 
     diff = io.StringIO()
 
@@ -137,7 +137,10 @@ def analyze_diff(rel_id: int, changes: List[Diff]) -> str:
         # is about: the relation itself, its tags or its members
         if path.startswith("members."):
             parts = path.split(".")
-            member_pos = parts[1]
+            member_pos = int(parts[1])-1
+
+            # len(parts) == 2 (e.g. parts = "members.192") means an added / removed member
+            # more than 2 means a change in a member
 
             what = ""
             if len(parts) > 2:
@@ -149,15 +152,15 @@ def analyze_diff(rel_id: int, changes: List[Diff]) -> str:
                     what = "data"
 
             if change.new is None:
-                print(f"member #{member_pos} removed, was: {change.old_str}", file=diff)
+                print(f"member #{member_pos} ({old.members[member_pos].type}) removed, was: {change.old_str}", file=diff)
             elif change.old is None:
-                print(f"member #{member_pos} added: {change.new_str}", file=diff)
+                print(f"member #{member_pos} ({new.members[member_pos].type}) added: {change.new_str}", file=diff)
             else:
                 if what:
                     additional = f"'s {what}"
                 else:
                     additional = ""
-                print(f"member #{member_pos}{additional} changed: {change.old_str} -> {change.new_str}", file=diff)
+                print(f"member #{member_pos} ({new.members[member_pos].type}){additional} changed: {change.old_str} -> {change.new_str}", file=diff)
 
         elif path.startswith("tag."):
             if change.new is None:
@@ -174,8 +177,6 @@ def analyze_diff(rel_id: int, changes: List[Diff]) -> str:
             else:
                 print(f"relation attribute '{path}' changed: {change.old_str} -> {change.new}", file=diff)            
 
-
-    #log.info(diff.getvalue())
     res = diff.getvalue()
     diff.close()
     return res

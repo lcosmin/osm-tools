@@ -5,7 +5,7 @@ import pathlib
 import io
 
 from .utils import get_relation_from_api, get_relation_from_file, get_relation_ids_from_file
-from .utils import compare_relations, analyze_diff
+from .utils import compare_relations, generate_report
 from .models import diff_relation
 
 
@@ -79,6 +79,6 @@ def main():
             changes = diff_relation(new, old)
             if changes:
 
-                diff = analyze_diff(new.id, changes)
+                diff = generate_report(new.id, new, old, changes)
                 log.info(diff)
                
